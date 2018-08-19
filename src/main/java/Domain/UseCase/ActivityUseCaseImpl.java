@@ -2,12 +2,12 @@ package Domain.UseCase;
 
 import Domain.Repository.Activity.ActivityRepository;
 import Domain.Repository.Activity.AuthorizeRepository;
-import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.appsactivity.Appsactivity;
 import com.google.api.services.appsactivity.model.Activity;
 import com.google.api.services.appsactivity.model.ListActivitiesResponse;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 public class ActivityUseCaseImpl implements ActivityUseCase{
@@ -21,7 +21,7 @@ public class ActivityUseCaseImpl implements ActivityUseCase{
     }
 
     @Override
-    public void loadActivityLog() throws IOException{
+    public void loadActivityLog() throws IOException, GeneralSecurityException{
         Appsactivity service = this.authorizeRepository.getService();
 
         ListActivitiesResponse response = service.activities().list()
