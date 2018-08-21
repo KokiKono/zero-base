@@ -4,10 +4,10 @@ import Domain.Repository.Activity.ActivityRepository;
 import Domain.Repository.Activity.AuthorizeRepository;
 import com.google.api.services.appsactivity.Appsactivity;
 import com.google.api.services.appsactivity.model.Activity;
-import com.google.api.services.appsactivity.model.ListActivitiesResponse;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ActivityUseCaseImpl implements ActivityUseCase{
@@ -21,24 +21,17 @@ public class ActivityUseCaseImpl implements ActivityUseCase{
     }
 
     @Override
-    public void loadActivityLog() throws IOException, GeneralSecurityException{
+    public void loadActivityLog() throws IOException, GeneralSecurityException, SQLException{
         Appsactivity service = this.authorizeRepository.getService();
 
-        ListActivitiesResponse response = service.activities().list()
-                .setSource("drive.google.com")
-                .setDriveAncestorId("root")
-                .setPageSize(10)
-                .execute();
-
-        List<Activity> activities = response.getActivities();
-
-        if (activities == null || activities.size() == 0) return;
+        List<Activity> activities = this.activityRepository.getActivityLogsFromAPI(service);
 
         this.activityRepository.saveActivityLogs(activities);
+
     }
 
     @Override
-    public List<Activity> getActivityLogs() {
+    public List<Activity> getActivityLogs()throws SQLException {
         return this.activityRepository.getActivityLogsFromSave();
     }
 }
