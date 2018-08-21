@@ -23,8 +23,6 @@ public abstract class AuthorizeDataStoreBaseImpl implements AuthorizeDataStore {
         InputStream inputStream
                 = this.getClass().getResourceAsStream(getCredentialsPath());
 
-        System.out.println(inputStream);
-        System.out.println(getCredentialsPath());
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(inputStream));
 
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
