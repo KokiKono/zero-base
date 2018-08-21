@@ -1,28 +1,32 @@
 package Data.DataStore.Activity;
 
 import Data.DataStore.Dao.ActivityDao;
+import Data.Entity.ActivityLog;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.services.appsactivity.Appsactivity;
 import com.google.api.services.appsactivity.model.Activity;
+import com.google.api.services.appsactivity.model.Event;
 import com.google.api.services.appsactivity.model.ListActivitiesResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class ActivityDataStoreImpl implements ActivityDataStore{
+public class ActivityDataStoreImpl implements ActivityDataStore {
 
-    private ActivityDao activityDao;
     private Appsactivity service;
 
-    public ActivityDataStoreImpl(Appsactivity service) throws SQLException{
+    public ActivityDataStoreImpl(Appsactivity service) {
         this.service = service;
-        this.activityDao = new ActivityDao(ActivityDao.newInstance());
     }
 
     @Override
-    public void saveActivities(List<Activity> activities) {
-        for(Activity activity: activities) {
-            this.activityDao.saveActivity(activity);
+    public void saveActivities(List<Activity> activities) throws SQLException{
+        for (Activity activity : activities) {
+            ActivityDao activityDao = new ActivityDao(ActivityDao.newInstance());
+            activityDao.saveActivity(activity);
         }
     }
 
