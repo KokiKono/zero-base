@@ -5,7 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DaoBase {
-    private Connection con;
+    protected Connection con;
+    private boolean isProgressTransaction = false;
 
     public DaoBase(Connection connection) {
         this.con = connection;
@@ -19,5 +20,27 @@ public class DaoBase {
     public void close() throws SQLException{
         this.con.close();
     }
+
+    public void beginTransaction() throws SQLException{
+        this.isProgressTransaction = true;
+        this.con.setAutoCommit(false);
+    }
+
+    public void commit() throws SQLException{
+        this.isProgressTransaction = false;
+        this.con.commit();
+        this.con.setAutoCommit(true);
+    }
+
+    public void rollback() throws SQLException{
+
+        if(this.isProgressTransaction == false) return;
+
+        this.isProgressTransaction = false;
+        this.con.rollback();
+        this.con.setAutoCommit(true);
+    }
+
+
 
 }
