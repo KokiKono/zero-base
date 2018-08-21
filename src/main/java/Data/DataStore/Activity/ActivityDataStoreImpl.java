@@ -27,8 +27,48 @@ public class ActivityDataStoreImpl implements ActivityDataStore{
     }
 
     @Override
-    public List<Activity> getNewActivityLog(){
-        return null;
+    public List<Activity> getNewActivityLog(Appsactivity service) throws SQLException{
+
+        ArrayList<Activity> resultActivities = new ArrayList<>();
+        ActivityDao activityDao = new ActivityDao(ActivityDao.newInstance());
+        Date latestLogDateTime = activityDao.latestLogDateTime();
+//        if (latestLogDateTime == null) latestLogDateTime = new Date();
+
+        String nextPageToken = null;
+        try {
+            do {
+                Appsactivity.Activities.List list = service.activities().list()
+                    .setSource("drive.google.com")
+                    .setDriveAncestorId("root")
+                    .setPageSize(10);
+                if (nextPageToken != null) {
+                    list.setPageToken(nextPageToken);
+                }
+
+                ListActivitiesResponse activitiesResponse = list.execute();
+                List<Activity> activities = activitiesResponse.getActivities();
+
+                for (Activity activity : activities) {
+                    Event event = activity.getCombinedEvent();
+                    if (latestLogDateTime == null) {
+                        resultActivities.add(activity);
+                        continue;
+                    }
+                    Date date = new Date(event.getEventTimeMillis().longValue());
+                    int diff = latestLogDateTime.compareTo(date);
+
+                    if (diff > 0) {
+                        resultActivities.add(activity);
+                    }
+                }
+                nextPageToken = activitiesResponse.getNextPageToken();
+
+            } while (nextPageToken == null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return resultActivities;
     }
 
     @Override
