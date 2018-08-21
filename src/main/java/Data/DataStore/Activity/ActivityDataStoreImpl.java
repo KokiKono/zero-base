@@ -72,7 +72,24 @@ public class ActivityDataStoreImpl implements ActivityDataStore{
     }
 
     @Override
-    public List<Activity> getSavesActivityLog() {
-        return null;
+    public List<Activity> getSavesActivityLog() throws SQLException{
+        ActivityDao activityDao = new ActivityDao(ActivityDao.newInstance());
+        List<ActivityLog> activityLogs = activityDao.getAllLogs();
+        if (activityLogs.size() == 0) {
+            return new ArrayList<>();
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        List<Activity> activities = new ArrayList<>();
+        try {
+            for (ActivityLog activityLog : activityLogs) {
+                Activity activity = mapper.readValue(activityLog.getJson(), Activity.class);
+                activities.add(activity);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return activities;
     }
 }
