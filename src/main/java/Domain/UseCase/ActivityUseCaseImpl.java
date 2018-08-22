@@ -12,10 +12,10 @@ import java.util.List;
 
 public class ActivityUseCaseImpl implements ActivityUseCase{
 
-    private AuthorizeRepository<Appsactivity> authorizeRepository;
+    private AuthorizeRepository authorizeRepository;
     private ActivityRepository activityRepository;
 
-    public ActivityUseCaseImpl(AuthorizeRepository<Appsactivity> authorizeRepository, ActivityRepository activityRepository) {
+    public ActivityUseCaseImpl(AuthorizeRepository authorizeRepository, ActivityRepository activityRepository) {
         this.authorizeRepository = authorizeRepository;
         this.activityRepository = activityRepository;
     }

@@ -9,10 +9,10 @@ import com.google.api.services.appsactivity.Appsactivity;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
-public class AuthorizeRepositoryImpl implements AuthorizeRepository<Appsactivity>{
+public class AuthorizeRepositoryImpl implements AuthorizeRepository{
     private AuthorizeDataStore authorizeDataStore;
 
-    public AuthorizeRepositoryImpl(AuthorizeDataStore authorizeDataStore){
+    public AuthorizeRepositoryImpl(AuthorizeDataStore authorizeDataStore) {
         this.authorizeDataStore = authorizeDataStore;
     }
 
