@@ -25,12 +25,14 @@ public interface AuthorizeDataStore {
     /**
      * ログインをトライする
      * @return Credentialオブジェクト
+     * @throws IOException 資格情報ファイルが読み込めなかった場合に発生
+     * @throws GeneralSecurityException ログインユーザーに十分な資格がない
      */
     Credential login() throws IOException,GeneralSecurityException;
 
     /**
      * ログイントライ時のスコープ範囲を取得する。
-     * @return
+     * @return 詳細は{@link com.google.api.services.appsactivity.AppsactivityScopes#ACTIVITY}
      */
     List<String> getScopes();
 
