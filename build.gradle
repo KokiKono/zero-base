@@ -5,7 +5,7 @@ version '1.0'
 apply plugin: 'application'
 
 // Mainクラスを指定(パッケージ名込み(FQCN))
-mainClassName = 'App'
+mainClassName = 'Main'
 
 sourceCompatibility = 1.8
 
